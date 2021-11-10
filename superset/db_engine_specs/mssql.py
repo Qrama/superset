@@ -44,7 +44,7 @@ CONNECTION_HOST_DOWN_REGEX = re.compile(
 
 class MssqlEngineSpec(BaseEngineSpec):
     engine = "mssql"
-    engine_name = "Microsoft SQL"
+    engine_name = "Microsoft SQL Server"
     limit_method = LimitMethod.WRAP_SQL
     max_column_name_length = 128
 
@@ -55,12 +55,12 @@ class MssqlEngineSpec(BaseEngineSpec):
         "PT5M": "DATEADD(minute, DATEDIFF(minute, 0, {col}) / 5 * 5, 0)",
         "PT10M": "DATEADD(minute, DATEDIFF(minute, 0, {col}) / 10 * 10, 0)",
         "PT15M": "DATEADD(minute, DATEDIFF(minute, 0, {col}) / 15 * 15, 0)",
-        "PT0.5H": "DATEADD(minute, DATEDIFF(minute, 0, {col}) / 30 * 30, 0)",
+        "PT30M": "DATEADD(minute, DATEDIFF(minute, 0, {col}) / 30 * 30, 0)",
         "PT1H": "DATEADD(hour, DATEDIFF(hour, 0, {col}), 0)",
         "P1D": "DATEADD(day, DATEDIFF(day, 0, {col}), 0)",
         "P1W": "DATEADD(week, DATEDIFF(week, 0, {col}), 0)",
         "P1M": "DATEADD(month, DATEDIFF(month, 0, {col}), 0)",
-        "P0.25Y": "DATEADD(quarter, DATEDIFF(quarter, 0, {col}), 0)",
+        "P3M": "DATEADD(quarter, DATEDIFF(quarter, 0, {col}), 0)",
         "P1Y": "DATEADD(year, DATEDIFF(year, 0, {col}), 0)",
     }
 
@@ -126,3 +126,9 @@ class MssqlEngineSpec(BaseEngineSpec):
                 "have an alias on MSSQL. For example: SELECT COUNT(*) AS C1 FROM TABLE1"
             )
         return f"{cls.engine} error: {cls._extract_error_message(ex)}"
+
+
+class AzureSynapseSpec(MssqlEngineSpec):
+    engine = "mssql"
+    engine_name = "Azure Synapse"
+    default_driver = "pyodbc"
